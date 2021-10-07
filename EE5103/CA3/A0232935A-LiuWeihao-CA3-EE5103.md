@@ -35,6 +35,7 @@ Besides, the steady-state gain should be one, and the zero has been canceled, so
 $$
 \frac{T(1)}{A_m(1)}=1\\
 T(z)=A_m(1)=0.1\\
+\frac{Y(z)}{U_c(z)}=\frac{0.1}{z^2-1.8z+0.9}
 $$
 The controller can be expressd as
 $$
@@ -85,7 +86,7 @@ Use MATLAB to simulate the input signal and output signal.
 
 ![Q1-plot](./Q1-plot.png)
 
-As we can see, the output signals are almost same. But  after we canceled the process zero, the input signal is much smaller than the other. So we'd like to cancel the zeros.
+As we can see, the output signals are almost same. But  after we canceled the process zero, the input signal is biger than the other. Because if we want cancel the zero, we need to add a zero. So, the process which don't cancel the zero is better.
 
 <div STYLE="page-break-after: always;"></div>
 
@@ -188,15 +189,35 @@ $$
 
 ### b)
 
-The feedback controllor is same as **a)**, $R(z)=(z-1)(z-0.5),\;S(z)=z^2+z-1,\;U_{fb}(z)=-\frac{(z-1)(z-0.5)}{z^2+z-1}Y(z)$, the transfer function changes to:
+We want to reject constant disturbance, so let $R(z)=(z-1)(z+r_1),\;S(z)=s_0z^2+s_1z+s_2,\; A_o(z)=z^2$, we can get:
 $$
-G(z)=H_{ff}(z)\frac{B(z)R(z)}{A(z)R(z)+B(z)S(z)}=H_{ff}\frac{R(z)}{zA_m(z)}
+A(z)R(z)+B(z)S(z)=A_{cl}(z)=A_o(z)A_m(z)\\
+(z^2-1)(z-1)(z+r_1)+(s_0z^2+s_1z+s_2)(z-0.5)=z^4\\
+z^4+(r_1+s_0-1)z^3+(-r_1-0.5s_0+s_1-1)z^2+(-r_1-0.5s_1+s_2+1)z+(r_1-0.5s_2)=z^4\\
+\Rightarrow\begin{cases}
+r_1+s_0-1=0\\
+-r_1-0.5s_0+s_1-1=0\\
+-r_1-0.5s_1+s_2+1=0\\
+r_1-0.5s_2=0
+\end{cases}\\
+\Rightarrow\begin{cases}
+r_1=-\frac{1}{3}\\
+s_0=\frac{4}{3}\\
+s_1=\frac{4}{3}\\
+s_2=-\frac{2}{3}
+\end{cases}
+$$
+So, $R(z)=(z-1)(z-\frac{1}{3}),\;S(z)=\frac{4}{3}z^2+\frac{4}{3}z-\frac{2}{3},\;U_{fb}(z)=-\frac{S(z)}{R(z)}Y(z)=-\frac{\frac{4}{3}z^2+\frac{4}{3}z-\frac{2}{3}}{(z-1)(z-\frac{1}{3})}Y(z)$
+
+the transfer function changes to:
+$$
+G(z)=H_{ff}(z)\frac{B(z)R(z)}{A(z)R(z)+B(z)S(z)}=H_{ff}\frac{B(z)R(z)}{A_{cl}(z)}
 $$
 We want the close-loop transfer function as close to the reference model as possible, so:
 $$
-H_{ff}\frac{R(z)}{zA_m(z)}=\frac{B_m(z)}{A_m(z)}\\
-H_{ff}=\frac{zB_m(z)}{R(z)}=\frac{z}{(z-1)(z-0.5)}\\
-U(z)=-\frac{(z-1)(z-0.5)}{z^2+z-1}Y(z)+\frac{z}{(z-1)(z-0.5)}U_c(z)
+H_{ff}\frac{B(z)R(z)}{A_{cl}(z)}=\frac{B_m(z)}{A_m(z)}\\
+H_{ff}=\frac{A_o(z)B_m(z)}{B(z)R(z)}=\frac{z^2}{(z-1)(z-\frac{1}{3})(z-0.5)}\\
+U(z)=-\frac{\frac{4}{3}z^2+\frac{4}{3}z-\frac{2}{3}}{(z-1)(z-\frac{1}{3})}Y(z)+\frac{z^2}{(z-1)(z-\frac{1}{3})(z-0.5)}U_c(z)
 $$
 
 <div STYLE="page-break-after: always;"></div>
@@ -228,5 +249,4 @@ The zero of $B(z)$ is: $z=-c$. If we want perfect tracking, $B(z^{-1})$ should b
 $$
 |c|\leqslant1
 $$
-
 
