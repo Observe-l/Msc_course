@@ -1,0 +1,2 @@
+the example is to show how to transmit a large file using small packets. the file to be sent is "myfile.txt", the received data is stored in "myTCPreceive.txt" in TCP case and in "myUDPreceive.txt" in UDP case.
+the packet size is fixed at 100 bytes per packets. the receiver transmit the acknolegement to sender when the last byte is received. In test, the file size is 50554 bytes. In TCP case, all data is received without error. 
