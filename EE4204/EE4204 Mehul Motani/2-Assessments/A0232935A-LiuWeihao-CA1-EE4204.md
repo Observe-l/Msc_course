@@ -51,13 +51,22 @@ TCP/IP stack contain **data link layer**, **network layer**, **transport layer**
 
 **Pros:**
 
+1. Increased efficiency. 
 
+2. This contributes to improve the QoS in mobile network.
+
+3. It is used in various Routing schemes and for reservation mechanisms.
+
+4. This strategy supports information exchange  and optimization.
 
 **Cons:**
 
+1. It suffers with lack of proper architecture.
 
-
-
+2. It may create chaos.
+3. Cross-layer Interaction may lead to unforeseen dependencies among the layers.
+4. It cannot be easily integrated.
+5. Chances of various improper stability issues if not handled correctly.
 
 ## Q4
 
@@ -66,4 +75,71 @@ TCP/IP stack contain **data link layer**, **network layer**, **transport layer**
 Compare with circuit switching, packet switching allows more users to use network.
 
 **b) End-to-End principle**
+
+This principle is aimed to secure the data transmit from sender to it's destination.
+
+## Q5
+
+**a)**
+
+ARQ is in the data link layer and transport layer
+
+**b)**
+
+TCP is in transport layer
+
+**c)**
+
+In transport layer, ARQ is part of TCP. TCP can also provide flow control, congestion control.
+
+In data link layer, ARQ provide hop-by-hop transmit reliability.
+
+## Q6
+
+**a)** The hierarchical structure of Internet
+
+Network edge: applications and hosts
+
+Access networks, physical media: wired, wireless
+
+Network core: routers
+
+**b)** The addressing of Internet
+
+It made up of a network address and host address.
+
+## Q7
+
+Circuit Switching is circuit-like performance. Each host has a fixed transmit channel (TDM, FDM). But it can not use the transmit channel 100%.
+
+Packet Switching can combine data from different host. So this method is more efficiency. But it can not avoid congestion.
+
+## Q8
+
+MAC Addresses handle the physical connection from computer to computer.
+
+IP Addresses handle the logical routeable connection from both computer to computer AND network to network
+
+## Q9
+
+Both can be used. But I prefer router.
+
+**pros:**
+
+1. The host can access the Internet and other networks sharing a single IP.
+2. Router can set up a larger-scale network than  switching.
+
+**cons:**
+
+Because router works in network layer while  switch works in data link layer, the transmit rate of router is slower.
+
+## Q10
+
+**a)** Data link layer
+
+Broadcast storm, ARP/switch poisoning
+
+**b)** Network layer
+
+DDoS attack: smurf attack, ping of death attack
 

@@ -32,6 +32,8 @@ $$
 $$
 
 Besides, the steady-state gain should be one, and the zero has been canceled, so
+
+
 $$
 \frac{T(1)}{A_m(1)}=1\\
 T(z)=A_m(1)=0.1\\

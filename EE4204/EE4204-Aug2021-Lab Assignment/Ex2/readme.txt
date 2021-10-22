@@ -1,0 +1,2 @@
+the example is to show how to transmit a large packet using UDP and TcP. Here the large packet is achieved from a file which is nearly 30000 bytes (if larger, the MAXLEN in headsock.h should be also modified). The file name is "myfile.txt", the client end try to send the file to the server in one packet.
+At the receiver, the function "recv" is called several times untile all the data is received (the packet is larger than the TCP receiver buffer). The received data is stored in file "myTCPreceive.txt".
