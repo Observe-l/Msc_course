@@ -4,13 +4,13 @@ udp_client.c: the source file of the client in udp
 
 #include "headsock.h"
 
-float error_free(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *len);
-float stop_wait(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *len);    
+float stop_wait(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *len, int DATALEN);    
 void tv_sub(struct  timeval *out, struct timeval *in);
 
 int main(int argc, char *argv[])
 {
 	int sockfd;
+	int DATALEN;
 	long len;
 	float ti, rt;
 	struct sockaddr_in ser_addr;
@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	struct in_addr **addrs;
     FILE *fp;
 
-	if (argc!= 2)
+	if (argc!= 3)
 	{
 		printf("parameters not match.");
 		exit(0);
@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
 		printf("error when gethostbyname");
 		exit(0);
 	}
+
+	DATALEN = atoi(argv[2]);
 
 	sockfd = socket(AF_INET, SOCK_DGRAM, 0);             //create socket
 	if (sockfd<0)
@@ -63,7 +65,7 @@ int main(int argc, char *argv[])
 	}
 
 	// ti = error_free(fp, sockfd, (struct sockaddr *)&ser_addr, sizeof(struct sockaddr_in), &len);   // receive and send
-	ti = stop_wait(fp, sockfd, (struct sockaddr *)&ser_addr, sizeof(struct sockaddr_in), &len);   // receive and send
+	ti = stop_wait(fp, sockfd, (struct sockaddr *)&ser_addr, sizeof(struct sockaddr_in), &len, DATALEN);   // receive and send
 	rt = (len/(float)ti);
 	printf("Time(ms) : %.3f, Data sent(byte): %d\nData rate: %f (Kbytes/s)\n", ti, (int)len, rt);
 
@@ -71,69 +73,13 @@ int main(int argc, char *argv[])
 	exit(0);
 }
 
-float error_free(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *len)
-{
-   	char *buf;
-	long lsize, ci;
-	char sends[DATALEN];
-	struct ack_so ack;
-	int n, slen;
-	float time_inv = 0.0;
-	struct timeval sendt, recvt;
-	ci = 0;
-
-	fseek (fp , 0 , SEEK_END);
-	lsize = ftell (fp);
-	rewind (fp);
-	printf("The file length is %d bytes\n", (int)lsize);
-	printf("the packet length is %d bytes\n",DATALEN);
-
-    // allocate memory to contain the whole file.
-	buf = (char *) malloc (lsize);
-	if (buf == NULL) exit (2);
-
-    // copy the file into the buffer.
-    fread (buf,1,lsize,fp);
-    /*** the whole file is loaded in the buffer. ***/
-
-	buf[lsize] ='\0';									//append the end byte
-	gettimeofday(&sendt, NULL);							//get the current time
-    while (ci <= lsize)
-    {
-        if ((lsize+1-ci) <= DATALEN )
-			slen = lsize + 1 - ci;
-		else
-			slen = DATALEN;
-		memcpy(sends, (buf+ci), slen);
-		if ((n = sendto(sockfd, &sends, slen, 0, addr, addrlen)) == -1)
-		{
-			printf("send error!");
-			exit(1);
-		}
-		ci += slen;
-    }
-	if ((n= recvfrom(sockfd, &ack, 2, 0, (struct sockaddr *)&addr, &addrlen))==-1)
-	{
-		printf("error when receiving\n");
-		exit(1);
-	}
-	if (ack.num != 1|| ack.len != 0)
-		printf("error in transmission\n");
-
-	gettimeofday(&recvt, NULL);
-	*len = ci; 
-	tv_sub(&recvt, &sendt);
-	time_inv += (recvt.tv_sec)*1000.0 + (recvt.tv_usec)/1000.0;
-	return(time_inv);
-}
-
-float stop_wait(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *len)
+float stop_wait(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *len, int DATALEN)
 {
    	char *buf;
 	long lsize, ci;
 	char sends[DATALEN];
 	struct ack_so ack_rec, ack;
-	int n, slen, addrlen_sto;
+	int n, slen, addrlen_sto, err_times=0;
 	float time_inv = 0.0;
 	struct timeval sendt, recvt;
 	struct sockaddr_in addr_sto;
@@ -141,8 +87,8 @@ float stop_wait(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *
 	ci = 0;
 	
 	//estimate rtt, RTT = weight*RTT(original) + (1-weight)*RTT(new). Initial RTT is 1ms
-	float RTT = 1.0; //ms
-	float weight = 0.5; //weight
+	float R0, RTT = 1; //ms
+	float weight = 0.6; //weight
 	struct timeval rtt_in, rtt_out, rtt_set;
 
 	rtt_set.tv_sec = 0;
@@ -177,34 +123,53 @@ float stop_wait(FILE *fp, int sockfd, struct sockaddr *addr, int addrlen, long *
 		else
 			slen = DATALEN;
 		memcpy(sends, (buf+ci), slen);		
-
+		
 		if ((n = sendto(sockfd, &sends, slen, 0, addr, addrlen)) == -1)
 		{
 			printf("send error!\n");
 			n = errno;
-			printf("error is %d",n);
+			printf("error is %d\n",n);
 			exit(1);
 		}
+		gettimeofday(&rtt_in, NULL);
+		setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &rtt_set, sizeof(rtt_set));
 		if ((n= recvfrom(sockfd, &ack_rec, 2, 0, (struct sockaddr *)&addr_sto, &addrlen_sto))==-1)
 		{
+			n = errno;
+			if (n == 11)
+			{
+				// printf("packet lost, retransmit\n");
+				err_times += 1;
+				continue;
+			}
 			printf("error when receiving\n");
+			printf("error is %d\n",n);
 			exit(1);
 		}
-
+		gettimeofday(&rtt_out,NULL);
 		//if ACK lost or send two same packate, the data will retransmit
 		if (ack_rec.num == ack.num)
 		{
-			printf("Retransmit this packet");
+			// printf("Retransmit this packet");
+			err_times += 1;
 			continue;
 		}
 
+		tv_sub(&rtt_out, &rtt_in);
+		R0 = (rtt_out.tv_sec)*1000.0 + (rtt_out.tv_usec)/1000.0;
+		RTT = weight * RTT + (1-weight) * R0;
+		// printf("new RTT is: %f\nR0 is: %f", RTT,R0);
+		rtt_set.tv_sec = 0;
+		rtt_set.tv_usec = RTT * 1000;
 		ci += slen;
 		ack = ack_rec;
     }
+
 	gettimeofday(&recvt, NULL);
 	*len = ci; 
 	tv_sub(&recvt, &sendt);
 	time_inv += (recvt.tv_sec)*1000.0 + (recvt.tv_usec)/1000.0;
+	printf("Retransmit %d packet.\n",err_times);
 	return(time_inv);
 }
 
