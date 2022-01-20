@@ -8,3 +8,17 @@ EE5110: Special Topics in Automation and Control
 
 EE4204: Computer Networks
 
+
+
+# Sem2 Course
+
+EE5132 Wireless and Sensor Networks
+
+EE5137 Stochastic Processes
+
+EE5903 REAL-TIME SYSTEMS
+
+EE5106 ADVANCED ROBOTICS
+
+
+
