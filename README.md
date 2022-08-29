@@ -1,4 +1,4 @@
-# Sem1 Course
+# Sem1 Modules
 
 EE5101: Linear System
 
@@ -10,7 +10,7 @@ EE4204: Computer Networks
 
 
 
-# Sem2 Course
+# Sem2 Modules
 
 EE5132: Wireless and Sensor Networks
 
@@ -22,6 +22,6 @@ EE5106: ADVANCED ROBOTICS
 
 
 
-# Ph.D Enrolled Course
+# Ph.D Enrolled Modules
 
 EE5907: Pattern Recognition
