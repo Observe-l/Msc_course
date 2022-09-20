@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<!-- saved from url=(0074)https://tanrobby.github.io/teaching/ece_pattern_recognition/CA1/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../favicon.ico"> -->
+
+    <title>EE5907: CA1</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./EE5907_ CA1_files/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="./EE5907_ CA1_files/jumbotron.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="container" style="font-size:16px">
+      <br>
+      <center>
+	<h1>EE5907/EE5027: CA1</h1>
+	<h3>Deadline: September 30, 2022 at 5pm</h3> 
+	<br>
+	<hr>
+      </center>
+      <h3>Part 1: MAP</h3>
+      <p>
+	Write a program in python to implement the MAP (or
+	regularization) for 
+	polynomial curve fitting problem. Follow the instructions below:
+	</p><ol>
+	  <li> Generate 50 2D-data points using the following
+	    function:
+	    <img src="./EE5907_ CA1_files/ass1_04.png" style="height:20px;">
+	  </li><li> Add Gaussian random noise to the data
+	  </li><li> Show the original curve line and the noisy data.
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass2_01.png" style="height:200px;">.
+	    <br>
+	    <em>The red line is the original curve based on the
+	      equation. The green dots are the noisy data. </em>
+
+
+	    
+	  </li><li> Fit the generated noisy data using the MAP as discussed
+	  in class.
+
+	  </li><li> Compute and display the total absolute error value
+	  (between the predicted and the correct ones) of using the computed w.
+	  </li><li> Display the estimated values of w 
+	  </li><li> Experiment with your code by changing M and alpha (the
+	    coefficient of the regularization/prior term) to various
+	    values, and then show the plots. On each the plot, you must
+	    show the values of M and alpha.
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass2_02.png" style="height:200px;">
+	    <img src="./EE5907_ CA1_files/ass2_03.png" style="height:200px;">
+	    <br>
+	    <em>Left: An example of the overfitting problem when M =
+	      10.
+	      Right: An example of how the regularization term reduces
+	      the overfitting problem (M =10, alpha = 0.4).</em>
+
+	  </li><li> From the experiment in #7, discuss how M and alpha
+	  influence on the fitting accuracy.
+	</li></ol>    
+      <p></p>
+      <br>
+      <br>
+      <hr>
+      <h3>Part 2: BASIS FUNCTION</h3>
+      <p>
+	Write a program in python to implement the MLE that employs basis
+	functions to solve the polynomial curve fitting problem. Follow the instructions below:
+	</p><ol>
+	  <li> Generate 50 2D-data points using the following
+	    function:
+	    <img src="./EE5907_ CA1_files/ass1_04.png" style="height:20px;">
+	  </li><li> Add Gaussian random noise to the data
+	  </li><li> Fit the generated noisy data using the MLE that employs
+	  the 
+	    <b>Gaussian basis functions</b> as discussed  in class.
+	  </li><li> Show your results for different values of M that
+	    generate overfitting and underfitting curves.
+	    <br>	    
+	    <img src="./EE5907_ CA1_files/ass2_04.png" style="height:200px;">	    
+	    <img src="./EE5907_ CA1_files/ass2_05.png" style="height:200px;">	    
+	    <br>
+	  </li><li> Change the basis functions to the <b>sigmoid basis
+	  functions</b>, and show the results for different values of M that
+	    generate overfitting and underfitting curves.
+	  </li><li> Change the original curve function
+	  to 	    <img src="./EE5907_ CA1_files/ass1_01.png" style="height:18px;">,
+	  and use the sigmoid basis function to estimate the best
+	   curve fitting from the noisy data.
+	    <br>	    
+	    <img src="./EE5907_ CA1_files/ass2_06.png" style="height:200px;">
+	  </li><li> Experiment with different parameters of the Gaussian and
+	    sigmoid basis functions, and then show the plot.
+	    Also, discuss the advantages of
+	  these basis functions over polynomial functions.
+	</li></ol>
+      <p></p>
+      <br>
+      <br>
+      <hr>
+      <h3>Part 3: FULL BAYESIAN + PREDICTIVE DISTRIBUTION</h3>
+      <p>
+	Write a program in python to implement the full Bayesian
+	inference on Gaussian variables for 
+	curve fitting problem. Follow the instructions below:
+	</p><ol>
+	  <li> Generate 50 2D-data points using the following
+	    function:
+	    <img src="./EE5907_ CA1_files/ass1_04.png" style="height:20px;">.
+	    Add Gaussian random noise to the data.
+	    Show the original curve line and the noisy data.
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass2_01.png" style="height:200px;">.
+	    <br>
+	    <em>The red line is the original curve based on the
+	      equation. The green dots are the noisy data. </em>
+
+	  </li><li> Compute w based on the full Bayesian inference (by
+	  using basis functions like discussed in class).  Display the estimated values of w.
+	  </li><li> Experiment with your code by changing alpha and beta.
+	    Discuss the meaning of them with respect to the curve fitting
+	    results.
+	  </li><li> Show your best fitting, similar to:
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass3_fullbayes.png" style="height:200px;">
+	    <br>
+	  </li><li> Explain how useful p(w|t) for the training and testing stages.
+	  </li><li> Generate 50 2D-data points using the following
+	    function:
+	    <img src="./EE5907_ CA1_files/ass1_04.png" style="height:20px;">.
+	    Add Gaussian random noise to the data.
+	    Show the original curve line and the noisy data.
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass2_01.png" style="height:200px;">.
+	    <br>
+	    <em>The red line is the original curve based on the
+	      equation. The green dots are the noisy data. </em>
+
+	  </li><li> Compute the predictive distribution of every input
+	    data sequentially, where each input data is taken randomly
+	    from the noise data.  Show your best prediction results
+	    for all 50 data one by one: 
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass4_01.png" style="height:230px;">
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass4_02.png" style="height:230px;">
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass4_03.png" style="height:230px;">
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass4_04.png" style="height:230px;">
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass4_05.png" style="height:230px;">
+	    <br>
+	    ...
+	    <br>	    
+	    ...
+	    <br>	    
+	    ...
+	    <br>	    
+	    <img src="./EE5907_ CA1_files/ass4_49.png" style="height:230px;">
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass4_50.png" style="height:230px;">
+	    <br>
+	  </li><li> Explain why the predictive distribution is better than
+	  the original form of the full Bayesian inference.
+	  </li><li> Discuss the differences between p(t_new|t) and p(w|t).
+	</li></ol>    
+      <p></p>
+
+      <br>
+      <br>
+      <hr>
+      <h3>Part 4: CLASSIFICATION USING FULL BAYESIAN + PREDICTIVE
+	DISTRIBUTION</h3>
+            <p>
+	</p><ol>
+	  <li> This is an example code to generate classification data of two classes
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass6_code.png" style="width:500px;">
+
+	  </li><li> Based on the code above, generate data similar to:
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass7_05.png" style="width:370px;">
+	  </li><li> Implement the predictive distribution, where the output
+	    is a decision whether a given point belongs to C1 or C2. 
+		  Based in the generated data and your implementation, compute the probability map:
+	    <br>
+	    <img src="./EE5907_ CA1_files/ass7_06.png" style="width:370px;">
+
+	  </li><li> Ask the user to enter any new value of x,  and your
+	    task is to provide
+	    the decision whether it belongs to C1 or C2, and its
+	    uncertainty information.
+	</li></ol>
+      <p></p>
+
+      <br>
+      <br>
+      <hr>
+      
+      <br>
+      <h3>Submission</h3>
+	Submit both your code and results in an ipython-notebook format via Luminus by
+      the deadline.
+      
+      <br>
+      <br>
+
+      
+    </div>      
+
+</body></html>
