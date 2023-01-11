@@ -25,3 +25,7 @@ EE5106: ADVANCED ROBOTICS
 # Ph.D Enrolled Modules
 
 EE5907: Pattern Recognition
+
+EE6104: Adaptive Control Systems
+
+EE6934: Deep Learning(Advanced)
